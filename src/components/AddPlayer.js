@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Form, FloatingLabel, Button } from "react-bootstrap";
 import PlayerDataService from "../services/player.services";
 import CoachDataService from "../services/coach.service";
@@ -19,17 +19,15 @@ const AddPlayer = (props) => {
   let [bootSize, setBootSize] = useState(0);
   let [jerseySize, setJerseySize] = useState("");
   let [shortSize, setShortSize] = useState("");
-  let [role, setRoles] = useState("");
+  let [role, setRoles] = useState("Player");
   let [work_study, setPlace] = useState("");
 
-  let [message, setMessage] = useState({ error: false, msg: "" });
-
-  useEffect(() => {
-    console.log("The addplayering is here is : ", props.id);
-    if (props.id !== undefined && props.id !== "") {
-      editHandler();
-    }
-  }, [props.id]);
+  // useEffect(() => {
+  //   console.log("The addplayering is here is : ", props.id, props.type);
+  //   if (props.id !== undefined && props.id !== "") {
+  //     editHandler();
+  //   }
+  // }, [props.id]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -43,69 +41,47 @@ const AddPlayer = (props) => {
       work_study === ""
     ) {
       alertify.notify("All fields are mandatory!", "error", 2, function () {});
-
       return;
-    }
-    const newMember = {
-      name,
-      contactNo1,
-      contactNo2,
-      gender,
-      role,
-      dob,
-      age,
-      address,
-      teamName,
-      jerseySize,
-      shortSize,
-      bootSize,
-      work_study,
-    };
-
-    try {
-      if (props.id !== undefined && props.id !== "") {
-        role === "player"
-          ? await PlayerDataService.updatePlayer(props.id, newMember)
-          : await CoachDataService.updatePlayer(props.id, newMember);
-        props.setPlayerId("");
-        alertify.notify(
-          "Member" + name + " details updated successfully",
-          "success",
-          2,
-          function () {
-            props.setPopup(false);
-
-            console.log("dismissed");
-          }
-        );
-      } else {
-        alertify.confirm(
-          "Confirm adding this member?",
-          async function () {
-            role === "player"
-              ? await PlayerDataService.addPlayer(newMember)
-              : await CoachDataService.addCoach(newMember);
-            props.setPopup(false);
-
-            alertify.notify(
-              "Member " + name + " has been added successfully",
-              "success",
-              2,
-              function () {
+    } else {
+      const newMember = {
+        name,
+        contactNo1,
+        contactNo2,
+        gender,
+        role,
+        dob,
+        age,
+        address,
+        teamName,
+        jerseySize,
+        shortSize,
+        bootSize,
+        work_study,
+      };
+      alertify.confirm(
+        "Confirm adding this member?",
+        function () {
+          role === "Player"
+            ? PlayerDataService.addPlayer(newMember).then(() => {
+                alertify.success(
+                  "Member" + name + " has been added successfully"
+                );
                 props.setPopup();
-                console.log("dismissed");
-              }
-            );
-          },
-          function () {
-            alertify.error("Cancel");
-            props.setPopup(false);
-          }
-        );
-      }
-    } catch (err) {
-      setMessage({ error: true, msg: err.message });
+              })
+            : CoachDataService.addCoach(newMember).then(() => {
+                alertify.success(
+                  "Member" + name + " has been added successfully"
+                );
+                props.setPopup();
+              });
+        },
+        function () {
+          alertify.error("Cancel");
+          props.setPopup(false);
+        }
+      );
     }
+
     setName("");
     setAge(0);
     setDOB("");
@@ -113,7 +89,7 @@ const AddPlayer = (props) => {
     setContactNo1(0);
     setContactNo2(0);
     setGender("");
-    setRoles("");
+    setRoles("player");
     setPlace("");
     setTeamName("");
     setJerseySize("");
@@ -121,40 +97,26 @@ const AddPlayer = (props) => {
     setShortSize("");
   };
 
-  const editHandler = async () => {
-    try {
-      const docSnap = props.userRole
-        ? await CoachDataService.getPlayer(props.id)
-        : await PlayerDataService.getPlayer(props.id);
-      setName(docSnap.data().name);
-      setAge(docSnap.data().age);
-      setDOB(docSnap.data().dob);
-      setGender(docSnap.data().gender);
-      setAddress(docSnap.data().address);
-      setContactNo1(docSnap.data().contactNo1);
-      setContactNo2(docSnap.data().contactNo2);
-      setTeamName(docSnap.data().teamName);
-      setJerseySize(docSnap.data().jerseySize);
-      setBootSize(docSnap.data().bootSize);
-      setShortSize(docSnap.data().shortSize);
-      setPlace(docSnap.data().work_study);
-      setRoles(docSnap.data().roles);
-    } catch (err) {
-      setMessage({ error: true, msg: err.message });
-    }
-  };
-
-  useEffect(() => {
-    if (props.id !== undefined && props.id !== "") {
-      editHandler();
-    }
-  }, [props.id]);
-
   return (
     <>
       <div className="p-4 box">
         <form onSubmit={handleSubmit}>
           <Form.Group className="mb-1" controlId="formPlayerName">
+            <FloatingLabel
+              className="mb-2"
+              controlId="floatingSelect"
+              label="Role"
+            >
+              <Form.Select
+                aria-label="Role"
+                value={role}
+                onChange={(e) => setRoles(e.target.value)}
+              >
+                <option value="Player">Player</option>
+                <option value="Coach">Coach</option>
+              </Form.Select>
+            </FloatingLabel>
+
             <FloatingLabel
               controlId="floatingInput"
               label="Name"
@@ -178,7 +140,6 @@ const AddPlayer = (props) => {
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
               >
-                <option>-</option>
                 <option value="M">Male</option>
                 <option value="F">Female</option>
               </Form.Select>
@@ -320,21 +281,6 @@ const AddPlayer = (props) => {
                 value={work_study}
                 onChange={(e) => setPlace(e.target.value)}
               />
-            </FloatingLabel>
-            <FloatingLabel
-              className="mb-3"
-              controlId="floatingSelect"
-              label="Role"
-            >
-              <Form.Select
-                aria-label="role selection"
-                value={role}
-                onChange={(e) => setRoles(e.target.value)}
-              >
-                <option>Select Roles</option>
-                <option value="player">Player</option>
-                <option value="coach">Coach</option>
-              </Form.Select>
             </FloatingLabel>
           </Form.Group>
           <Button type="submit" value="Submit" variant="outline-info">

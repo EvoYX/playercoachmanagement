@@ -12,31 +12,49 @@ import {
 import PlayersDataService from "../services/player.services";
 import "bootstrap/dist/css/bootstrap.min.css";
 import alertify from "alertifyjs";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import Update from "./Update";
 
 const PlayerList = (props) => {
   let [players, setPlayers] = useState([]);
   let [search, setSearch] = useState(false);
   let [searchPlayers, setSearchPlayers] = useState([]);
-
+  let [selectedPlayer, setSelectedPlayer] = useState([]);
+  let [selectedId, setSelectedId] = useState("");
   let [name, setName] = useState("");
+  let [updateModal, setUpdateModal] = useState(false);
+
   useEffect(() => {
     getPlayers();
   }, []);
 
+  const showUpdate = (doc, id) => {
+    setSelectedId(id);
+    setSelectedPlayer(doc);
+    setUpdateModal(true);
+  };
+  const hideUpdate = () => {
+    setSelectedPlayer([]);
+    setSelectedId("");
+    setUpdateModal(false);
+    getPlayers();
+  };
   const getPlayers = async () => {
     setSearch(false);
     setName("");
-    const data = await PlayersDataService.getAllPlayers();
-    setPlayers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    PlayersDataService.getAllPlayers().then((data) => {
+      setPlayers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
   };
 
-  const deleteHandler = async (id) => {
+  const deleteHandler = (id) => {
     alertify.confirm(
       "Confirm Message",
-      async function () {
-        await PlayersDataService.deletePlayer(id);
-        alertify.notify("Deleted successfully", "success", 2, function () {
-          getPlayers();
+      function () {
+        PlayersDataService.deletePlayer(id).then(() => {
+          alertify.notify("Deleted successfully", "success", 2, function () {
+            getPlayers();
+          });
         });
       },
       function () {
@@ -140,7 +158,7 @@ const PlayerList = (props) => {
                       <Button
                         variant="secondary"
                         className="edit"
-                        onClick={(e) => props.getPlayerId(doc.id)}
+                        onClick={(e) => showUpdate(doc, doc.id)}
                       >
                         Edit
                       </Button>
@@ -170,13 +188,13 @@ const PlayerList = (props) => {
                     <td>{doc.jerseySize}</td>
                     <td>{doc.shortSize}</td>
                     <td>{doc.bootSize}</td>
-                    <td>{doc.work_studyplace}</td>
+                    <td>{doc.work_study}</td>
 
                     <td>
                       <Button
                         variant="secondary"
                         className="edit"
-                        onClick={(e) => props.getPlayerId(doc.id)}
+                        onClick={(e) => showUpdate(doc, doc.id)}
                       >
                         Edit
                       </Button>
@@ -193,6 +211,28 @@ const PlayerList = (props) => {
               })}
         </tbody>
       </Table>
+      {["end"].map((placement, idx) => (
+        <Offcanvas
+          key={idx}
+          placement={placement}
+          name={placement}
+          show={updateModal}
+          onHide={hideUpdate}
+          className="offcanvas offcanvas-end"
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>"Update Members"</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Update
+              hideModal={hideUpdate}
+              data={selectedPlayer}
+              id={selectedId}
+              role="Player"
+            ></Update>
+          </Offcanvas.Body>
+        </Offcanvas>
+      ))}
     </>
   );
 };

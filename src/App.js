@@ -13,14 +13,21 @@ function App() {
   const [memberId, setMemberId] = useState("");
   let [modal, setAddModal] = useState(false);
   let [role, setRoles] = useState(false);
-  const getPlayerIdHandler = (id) => {
+  let [type, setType] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const getPlayerIdHandler = ({ id, type }) => {
+    console.log("hi", id, type);
+
     popUpModal();
+    setType(type);
     setMemberId(id);
   };
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-
+  const refreshNow = () => {
+    setRefresh(!refresh);
+  };
   const popUpModal = () => {
     setMemberId("");
     setShow(true);
@@ -59,18 +66,12 @@ function App() {
           className="offcanvas offcanvas-end"
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-              {memberId !== undefined && memberId !== ""
-                ? "Update Members"
-                : "Add Members"}
-            </Offcanvas.Title>
+            <Offcanvas.Title>"Add Members"</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <AddPlayer
-              id={memberId}
-              setPlayerId={memberId}
               setPopup={handleClose}
-              userRole={role}
+              setRefresh={refreshNow}
             ></AddPlayer>
           </Offcanvas.Body>
         </Offcanvas>
@@ -79,11 +80,15 @@ function App() {
         <PlayerList
           getPlayerId={getPlayerIdHandler}
           setModal={setAddModal}
+          refresh={refresh}
+          setRefresh={refreshNow}
         ></PlayerList>
       ) : (
         <MemberList
           getPlayerId={getPlayerIdHandler}
           setModal={setAddModal}
+          setRefresh={refreshNow}
+          refresh={refresh}
         ></MemberList>
       )}
       {/* <div className="divSpacing">
