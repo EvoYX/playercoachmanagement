@@ -66,7 +66,7 @@ function App() {
           className="offcanvas offcanvas-end"
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>"Add Members"</Offcanvas.Title>
+            <Offcanvas.Title>Add Members</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <AddPlayer

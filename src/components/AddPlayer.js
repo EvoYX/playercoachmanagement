@@ -12,7 +12,7 @@ const AddPlayer = (props) => {
   let [age, setAge] = useState(0);
   let [contactNo1, setContactNo1] = useState(0);
   let [contactNo2, setContactNo2] = useState(0);
-  let [gender, setGender] = useState("");
+  let [gender, setGender] = useState("M");
   let [dob, setDOB] = useState("");
   let [teamName, setTeamName] = useState("");
   let [address, setAddress] = useState("");

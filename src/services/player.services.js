@@ -8,6 +8,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  orderBy,
 } from "firebase/firestore";
 
 const playersCollectionRef = collection(db, "Players");

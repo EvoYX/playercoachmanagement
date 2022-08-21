@@ -221,7 +221,7 @@ const PlayerList = (props) => {
           className="offcanvas offcanvas-end"
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>"Update Members"</Offcanvas.Title>
+            <Offcanvas.Title>Update Members</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Update
