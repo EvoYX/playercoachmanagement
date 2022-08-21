@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/playercoachmanagement/static/css/main.3d03a870.css",
-    "main.js": "/playercoachmanagement/static/js/main.dccb2940.js",
+    "main.js": "/playercoachmanagement/static/js/main.43cfef9c.js",
     "static/js/787.852f673b.chunk.js": "/playercoachmanagement/static/js/787.852f673b.chunk.js",
     "static/media/footballFederation.png": "/playercoachmanagement/static/media/footballFederation.8314594aca46829a188e.png",
     "index.html": "/playercoachmanagement/index.html",
     "main.3d03a870.css.map": "/playercoachmanagement/static/css/main.3d03a870.css.map",
-    "main.dccb2940.js.map": "/playercoachmanagement/static/js/main.dccb2940.js.map",
+    "main.43cfef9c.js.map": "/playercoachmanagement/static/js/main.43cfef9c.js.map",
     "787.852f673b.chunk.js.map": "/playercoachmanagement/static/js/787.852f673b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3d03a870.css",
-    "static/js/main.dccb2940.js"
+    "static/js/main.43cfef9c.js"
   ]
 }
