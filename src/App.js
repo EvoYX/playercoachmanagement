@@ -9,15 +9,15 @@ import PlayerList from "./components/PlayerList";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import "../src/alertify/css/themes/bootstrap.css";
 import MemberList from "../src/components/MemberList.js";
+
 function App() {
   const [memberId, setMemberId] = useState("");
   let [modal, setAddModal] = useState(false);
   let [role, setRoles] = useState(false);
   let [type, setType] = useState("");
   const [refresh, setRefresh] = useState(false);
-  const getPlayerIdHandler = ({ id, type }) => {
-    console.log("hi", id, type);
 
+  const getPlayerIdHandler = ({ id, type }) => {
     popUpModal();
     setType(type);
     setMemberId(id);
@@ -91,12 +91,6 @@ function App() {
           refresh={refresh}
         ></MemberList>
       )}
-      {/* <div className="divSpacing">
-        <MemberList
-          getPlayerId={getPlayerIdHandler}
-          setModal={setAddModal}
-        ></MemberList>
-      </div> */}
     </>
   );
 }

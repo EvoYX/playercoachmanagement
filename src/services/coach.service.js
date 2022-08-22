@@ -8,6 +8,8 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  query,
+  orderBy,
 } from "firebase/firestore";
 
 const coachCollectionRef = collection(db, "Coach");
@@ -28,7 +30,13 @@ class CoachDataService {
   };
 
   getAllCoach = () => {
-    return getDocs(coachCollectionRef);
+    return getDocs(
+      query(
+        coachCollectionRef,
+        orderBy("teamName", "asc"),
+        orderBy("name", "asc")
+      )
+    );
   };
 
   getCoach = (id) => {

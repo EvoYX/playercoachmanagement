@@ -9,6 +9,7 @@ import {
   deleteDoc,
   doc,
   orderBy,
+  query,
 } from "firebase/firestore";
 
 const playersCollectionRef = collection(db, "Players");
@@ -29,7 +30,13 @@ class PlayersDataService {
   };
 
   getAllPlayers = () => {
-    return getDocs(playersCollectionRef);
+    return getDocs(
+      query(
+        playersCollectionRef,
+        orderBy("teamName", "asc"),
+        orderBy("name", "asc")
+      )
+    );
   };
 
   getPlayer = (id) => {

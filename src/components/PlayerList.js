@@ -14,7 +14,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import alertify from "alertifyjs";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Update from "./Update";
+import { db } from "../firebase-config";
 
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+} from "firebase/firestore";
 const PlayerList = (props) => {
   let [players, setPlayers] = useState([]);
   let [search, setSearch] = useState(false);
