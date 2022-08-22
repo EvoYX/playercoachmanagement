@@ -91,6 +91,19 @@ function App() {
           refresh={refresh}
         ></MemberList>
       )}
+      <div className="divSpacing">
+        <footer className="footer">
+          <p>
+            © By{" "}
+            <a
+              className="link"
+              href="https://www.linkedin.com/in/ang-yong-xin-796172ab"
+            >
+              EvoYX
+            </a>
+          </p>
+        </footer>
+      </div>
     </>
   );
 }
